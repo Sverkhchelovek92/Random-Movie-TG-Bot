@@ -1,6 +1,11 @@
+require('dotenv').config()
+
 const { Telegraf, Markup } = require('telegraf')
 
-const bot = new Telegraf('8787457881:AAGeAQgnbpwsxBOAYVa3GkIBF_MPr1QEgRk')
+const bot = new Telegraf(process.env.BOT_TOKEN)
+
+const axios = require('axios')
+const API_KEY = process.env.API_KEY
 
 const movies = [
   { title: '2001: A Space Odyssey', genre: 'sci-fi' },
