@@ -31,9 +31,29 @@ bot.start((ctx) => {
   )
 })
 
-bot.hears('🎲 Случайный фильм', (ctx) => {
-  const random = movies[Math.floor(Math.random() * movies.length)]
-  ctx.reply(`🎥 Посмотри: ${random}`)
+bot.hears('🎲 Случайный фильм', async (ctx) => {
+  try {
+    const randomPage = Math.floor(Math.random() * 10) + 1
+
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&page=${randomPage}`,
+    )
+
+    const movies = res.data.results
+    const movie = movies[Math.floor(Math.random() * movies.length)]
+
+    const title = movie.title
+    const rating = movie.vote_average
+    const overview = movie.overview
+    const poster = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+
+    await ctx.replyWithPhoto(poster, {
+      caption: `🎬 ${title}\n⭐ ${rating}\n\n${overview}`,
+    })
+  } catch (err) {
+    console.error(err)
+    ctx.reply('Ошибка при получении фильма 😢')
+  }
 })
 
 bot.hears('🎭 По жанру', (ctx) => {
