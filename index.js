@@ -21,6 +21,13 @@ const movies = [
   { title: 'The Fly', genre: 'horror' },
 ]
 
+const genres = {
+  comedy: 35,
+  horror: 27,
+  scifi: 878,
+  drama: 18,
+}
+
 bot.start((ctx) => {
   ctx.reply(
     '🎬 Привет! Я помогу тебе выбрать фильм!',
@@ -79,15 +86,34 @@ bot.hears('⬅️ Назад', (ctx) => {
   )
 })
 
-function sendByGenre(ctx, genre) {
-  const filtered = movies.filter((m) => m.genre === genre)
+async function sendByGenre(ctx, genreId) {
+  try {
+    const randomPage = Math.floor(Math.random() * 10) + 1
 
-  if (filtered.length === 0) {
-    return ctx.reply('Нет фильмов 😢')
+    const res = await axios.get(
+      `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&with_genres=${genreId}&page=${randomPage}`,
+    )
+
+    const movies = res.data.results
+
+    if (!movies.length) {
+      return ctx.reply('Не удалось найти фильмы 😢')
+    }
+
+    const movie = movies[Math.floor(Math.random() * movies.length)]
+
+    const poster = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+
+    await ctx.replyWithPhoto(poster, {
+      caption:
+        `🎬 ${movie.title}\n` +
+        `⭐ ${movie.vote_average}\n\n` +
+        `${movie.overview}`,
+    })
+  } catch (err) {
+    console.error(err)
+    ctx.reply('Ошибка при загрузке фильма 😢')
   }
-
-  const random = filtered[Math.floor(Math.random() * filtered.length)]
-  ctx.reply(`🎥 Попробуй: ${random.title}`)
 }
 
 bot.hears('🔥 Популярное', (ctx) => {
