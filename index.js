@@ -74,10 +74,10 @@ bot.hears('🎭 По жанру', (ctx) => {
   )
 })
 
-bot.hears('😂 Комедия', (ctx) => sendByGenre(ctx, 'comedy'))
-bot.hears('😱 Ужасы', (ctx) => sendByGenre(ctx, 'horror'))
-bot.hears('🚀 Sci-Fi', (ctx) => sendByGenre(ctx, 'sci-fi'))
-bot.hears('🎭 Драма', (ctx) => sendByGenre(ctx, 'drama'))
+bot.hears('😂 Комедия', (ctx) => sendByGenre(ctx, genres.comedy))
+bot.hears('😱 Ужасы', (ctx) => sendByGenre(ctx, genres.horror))
+bot.hears('🚀 Sci-Fi', (ctx) => sendByGenre(ctx, genres.scifi))
+bot.hears('🎭 Драма', (ctx) => sendByGenre(ctx, genres.drama))
 
 bot.hears('⬅️ Назад', (ctx) => {
   ctx.reply(
